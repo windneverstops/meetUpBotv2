@@ -6,9 +6,14 @@ import BotClasses
 
 try:
     class View(ui.View):
-            def __init__(self):
-                super().__init__()
-                self.value = None
+        def __init__(self):
+            super().__init__()
+            self.value = None
+            self.timeout = 100
+            
+        async def wait(self) -> bool:
+            return await super().wait()
+
 
     def homeView():
         view = View()
@@ -43,22 +48,28 @@ try:
         location = ui.TextInput(label='Location', required = False, placeholder="Where")
 
         async def on_submit(self,interaction):
-        
-
+         
             if self.startDate.value.strip() == "":
-                startDate = 'NULL'
+                startDateSQL = 'NULL'
+                startDate = None
             else:
+                startDateSQL = f'STR_TO_DATE(\"{self.startDate.value.strip()}\",\"%d/%m/%Y %T\")'
                 startDate = str_to_datetime(self.startDate.value.strip())
-                startDateStr = self.startDate.value.strip()
-                
+        
             if self.endDate.value.strip() == "":
-                endDate = 'NULL'
+                endDateSQL = 'NULL'
+                endDate = None
             else:
+                endDateSQL = f'STR_TO_DATE(\"{self.endDate.value.strip()}\",\"%d/%m/%Y %T\")'
                 endDate = str_to_datetime(self.endDate.value.strip())
-                endDateStr = self.endDate.value.strip()
-
+               
             description = self.description.value.strip()
+            if description == '':
+                description = None
             location = self.location.value.strip()
+            if location == '':
+                location = None
+
 
             config.cursor.execute("select guild_id from guild")
             issue = False
@@ -78,8 +89,8 @@ try:
                     (guild_id,mu_creator_id,mu_name,mu_startdate,mu_enddate,\
                         mu_description,mu_location) values ({interaction.guild_id},\
                             {interaction.user.id},'{self.name.value}',"\
-                                + f'STR_TO_DATE(\"{startDateStr}\",\"%d/%m/%Y %T\")' + ","\
-                                    + f'STR_TO_DATE(\"{endDateStr}\",\"%d/%m/%Y %T\")' + ","\
+                                + startDateSQL + ","\
+                                    + endDateSQL + ","\
                                         f"{python_to_sql_value(description)},{python_to_sql_value(location)})")     
                 config.cnx.commit()
             except Exception as e:
@@ -101,7 +112,7 @@ try:
         async def callback(self, interaction):
             view = View()
             if len(config.MEETUPS) == 0:                
-                view.add_item(BackButton)
+                view.add_item(BackButton())
                 await interaction.response.edit_message(content="No meetups available.",view=view)
             else:
                 view.add_item(EditMeetUpSelect())
@@ -201,7 +212,7 @@ try:
             output = ""
             if config.CHANGES.delete == True:
                 config.MEETUPS.pop(config.EDITKEY)
-                config.cursor.execute(f"delete from meet_up where mu_name = {config.EDITKEY}")
+                config.cursor.execute(f"delete from meet_up where mu_name = \'{config.EDITKEY}\'")
                 output = f'{config.EDITKEY} has been deleted!'
             elif len(config.CHANGES.dbChange) != 0:
                 config.MEETUPS[list(config.MEETUPS_TEMP.keys())[0]] = config.MEETUPS_TEMP[list(config.MEETUPS_TEMP.keys())[0]]
@@ -221,12 +232,12 @@ try:
                         sqlOutput += f' where mu_name = \'{list(config.MEETUPS_TEMP.keys())[0]}\''
 
                     output += config.CHANGES.chatMessage[i]
-                
+                config.cursor.execute(sqlOutput)
             else:
                 output = "No edits made"
 
-
-            config.cursor.execute(sqlOutput)
+            config.cnx.commit()
+            
             config.MEETUPS_TEMP.clear()
 
             viewConfirm = View()

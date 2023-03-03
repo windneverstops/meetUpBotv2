@@ -70,6 +70,7 @@ class MeetUp:
         return output
 
     def get_enddate(self) -> str:
+        print(self.enddate)
         if self.enddate != None:
             output = f'{self.enddate:%d %b %Y}'+ ' @ '  + f'{self.enddate:%H:%M:%S %p}'
         else:

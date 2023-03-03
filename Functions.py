@@ -42,6 +42,7 @@ def create_meetUp_embed(name) -> Embed:
         embed.add_field(name="End date and time",value = datetimeInfo)
     
     if config.MEETUPS[name].get_location() != None:
+        print(config.MEETUPS[name].get_location())
         embed.add_field(name="Location",value = config.MEETUPS[name].get_location())
     
     if config.MEETUPS[name].get_status() != None:

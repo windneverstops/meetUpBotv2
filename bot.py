@@ -3,6 +3,7 @@ import Functions
 import components
 import BotClasses
 import config
+from time import sleep
 
 try:
     @config.bot.command()
