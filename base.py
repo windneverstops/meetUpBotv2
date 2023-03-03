@@ -1,4 +1,34 @@
+""" Base file for global variables and all imports/dependencies """
 from datetime import datetime
+from discord import ui,Embed,Intents
+import mysql.connector as connector
+from discord.ext import commands
+import os
+from dotenv import load_dotenv
+
+#Creating bot
+#Dictionary for storing meet ups
+
+MEETUPS = dict()
+MEETUPS_TEMP = dict()
+EDITKEY = ""
+bot = commands.Bot(command_prefix=">", intents=Intents.all())
+bot.remove_command("help")
+
+load_dotenv(dotenv_path="config.env")
+bot_token = os.getenv("DISCORD_BOT_TOKEN")
+db_username = os.getenv("USERNAME")
+db_password = os.getenv("PASSWORD")
+db_host = os.getenv("HOST")
+config = {
+    'user':db_username,
+    'password':db_password,
+    'database':'meetup',
+    'host':db_host,
+    'ssl_ca':'DigiCertGlobalRootCA.crt (2).pem'
+}
+cnx = connector.connect(**config)
+cursor = cnx.cursor(dictionary=True)
 
 class MeetUp:
     ''' MeetUp represents a meet up instance '''
