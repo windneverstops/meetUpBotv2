@@ -16,7 +16,7 @@ def str_to_datetime(input:str) -> datetime:
     return datetime(year[2],year[1],year[0], time[0],time[1],time[2]) 
 
 def datetime_to_str_rep(input:datetime) -> str:
-    return f'{input:%d %b %Y}'+ ' ' + f'{input:%H:%M:%S %p}'
+    return f'{input:%d %b %Y}'+ ' @ ' + f'{input:%H:%M:%S %p}'
 
 def datetime_to_str_raw(input:datetime) -> str:
     return f'{input:%d/%m/%Y}'+ ' ' + f'{input:%H:%M:%S}'
