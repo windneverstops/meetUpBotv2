@@ -6,7 +6,7 @@ class MeetUp:
     
     # Implicits
     def __init__(self, name: str = None, startdate: datetime = None, enddate: datetime = None, \
-                description: str = None, location: int = None, status: str = None,payAmount: float = \
+                description: str = None, location: str = None, status: str = None,payAmount: float = \
                 None,payTo: str = None, payInfo: str = None, other: str = None, guildId: str = None) -> None:
         
         # Sets name value
@@ -62,14 +62,14 @@ class MeetUp:
     def get_name(self) -> str: 
         return self.name
     
-    def get_startdate(self) -> datetime:
+    def get_startdate(self) -> str:
         if self.startdate != None:
             output = f'{self.startdate:%d %b %Y}'+ ' @ ' + f'{self.startdate:%H:%M:%S %p}'
         else:
             output = None
         return output
 
-    def get_enddate(self) -> datetime:
+    def get_enddate(self) -> str:
         if self.enddate != None:
             output = f'{self.enddate:%d %b %Y}'+ ' @ '  + f'{self.enddate:%H:%M:%S %p}'
         else:
@@ -119,5 +119,18 @@ class MEETUP:
                             meetUp['mu_payinfo'],meetUp['mu_other'])
         config.MEETUPS = MEETUP.MEETUPS
 
+class Changes:
+    delete = False
+    deleteMessage = ''
+    chatMessage = []
+    dbChange = {}
 
+    @staticmethod
+    def reset():
+        Changes.delete = False
+        Changes.deleteMessage = ''
+        Changes.chatMessage = []
+        Changes.dbChange = []
+
+config.CHANGES = Changes
 config.MeetUp = MeetUp

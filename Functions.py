@@ -15,18 +15,22 @@ def str_to_datetime(input:str) -> datetime:
         time.append(int(numberTime))       
     return datetime(year[2],year[1],year[0], time[0],time[1],time[2]) 
 
+def datetime_to_str_rep(input:datetime) -> str:
+    return f'{input:%d %b %Y}'+ ' ' + f'{input:%H:%M:%S %p}'
+
+def datetime_to_str_raw(input:datetime) -> str:
+    return f'{input:%d/%m/%Y}'+ ' ' + f'{input:%H:%M:%S}'
+
 def python_to_sql_value(input) -> str:
     if input == None or input == '':
-        return 'null'
+        return 'NULL'
     else:
-        return input
+        return f"\'{input}\'"
 
 def money_to_str(input: float | int) -> str:
     return '$' + str(input)
     
-   
-
-def create_meetUp_embed(name):
+def create_meetUp_embed(name) -> Embed:
     """ Generates a meet up embed object based off the name/key. Returns an embed object """
     embed = Embed(title = name, description = config.MEETUPS[name].get_description())
     if config.MEETUPS[name].get_startdate() != None:
