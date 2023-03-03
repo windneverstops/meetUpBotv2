@@ -16,34 +16,16 @@ class MeetUp:
         self.name = name    
         
         # create new date object for start date
-        if type(startdate) == str:
-            if startdate != None: 
-                year = []
-                time = []
-                timeEdit = startdate.split()
-                for numberYear in timeEdit[0].split('/'):
-                    year.append(int(numberYear))
-                for numberTime in timeEdit[1].split(':'):
-                    time.append(int(numberTime))
-                self.startdate = datetime.datetime(year[2],year[1],year[0], time[0],time[1],time[2]) 
-            else: self.startdate = startdate
-        else:
+        if startdate != None:
             self.startdate = startdate
+        else:
+            pass
 
         # create new date object for end date
-        if type(startdate) == str:
-            if enddate != None: 
-                year = []
-                time = []
-                timeEdit = enddate.split()
-                for numberYear in timeEdit[0].split('/'):
-                    year.append(int(numberYear))
-                for numberTime in timeEdit[1].split(':'):
-                    time.append(int(numberTime))       
-                self.enddate = datetime.datetime(year[2],year[1],year[0], time[0],time[1],time[2])  
-            else: self.enddate = enddate
-        else:
+        if enddate != None:
             self.enddate = enddate
+        else:
+            pass
         
         self.description = description
         self.location = location
