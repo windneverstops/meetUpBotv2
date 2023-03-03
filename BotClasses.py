@@ -1,4 +1,5 @@
 from datetime import datetime
+import config
 
 class MeetUp:
     ''' MeetUp represents a meet up instance '''
@@ -99,3 +100,24 @@ class MeetUp:
     def get_guild_id(self) -> str:
         return self.guildId
         
+
+class MEETUP:
+    MEETUPS = dict()
+
+    def __init__(self):
+        pass
+    
+    @staticmethod
+    def retrieveFromDB():
+        config.cursor.execute('SELECT * from meet_up;')
+        
+        for meetUp in config.cursor.fetchall():
+            MEETUP.MEETUPS[meetUp['mu_name']] = \
+                MeetUp(meetUp['mu_name'],meetUp['mu_startdate'],\
+                    meetUp['mu_enddate'],meetUp['mu_description'],meetUp['mu_location'],\
+                        meetUp['mu_status'],meetUp['mu_payamount'],meetUp['mu_payto'],\
+                            meetUp['mu_payinfo'],meetUp['mu_other'])
+        config.MEETUPS = MEETUP.MEETUPS
+
+
+config.MeetUp = MeetUp

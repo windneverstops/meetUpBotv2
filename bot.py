@@ -2,25 +2,16 @@ import base
 import Functions
 import components
 import BotClasses
+import config
 
-@base.bot.command()
+@config.bot.command()
 async def MeetUp(ctx):
 
-    
-    view = components.ui.View()
-    
-    create = components.returnCreateButton(base.cursor,base.MEETUPS,BotClasses.MeetUp,base.cnx)
+    await ctx.send(view=components.homeView())
 
-
-    view.add_item(create)
-
-
-
-    await ctx.send(view=view)
-
-
-
-    
+@config.bot.event
+async def on_ready():
+    BotClasses.MEETUP.retrieveFromDB()
     
 
-base.bot.run(base.bot_token)
+config.bot.run(base.bot_token)

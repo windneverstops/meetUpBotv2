@@ -1,5 +1,7 @@
 from datetime import datetime
 from discord import Embed
+import config
+
 
 def str_to_datetime(input:str) -> datetime:
     """ Converts string to datetime.
@@ -22,46 +24,35 @@ def python_to_sql_value(input) -> str:
 def money_to_str(input: float | int) -> str:
     return '$' + str(input)
     
+   
 
-def retrieveFromDatabase(cursor,dictionary,object) -> dict:
-    cursor.execute('SELECT * from meet_up;')
-
-    for meetUp in cursor.fetchall():
-        dictionary[meetUp['mu_name']] = \
-            object(meetUp['mu_name'],meetUp['mu_startdate'],\
-                meetUp['mu_enddate'],meetUp['mu_description'],meetUp['mu_location'],\
-                    meetUp['mu_status'],meetUp['mu_payamount'],meetUp['mu_payto'],\
-                        meetUp['mu_payinfo'],meetUp['mu_other'])
-        
-    return dictionary
-
-def create_meetUp_embed(dictionary,name):
+def create_meetUp_embed(name):
     """ Generates a meet up embed object based off the name/key. Returns an embed object """
-    embed = Embed(title = name, description = dictionary[name].get_description())
-    if dictionary[name].get_startdate() != None:
-        datetimeInfo = dictionary[name].get_startdate()
+    embed = Embed(title = name, description = config.MEETUPS[name].get_description())
+    if config.MEETUPS[name].get_startdate() != None:
+        datetimeInfo = config.MEETUPS[name].get_startdate()
         embed.add_field(name="Start date and time",value = datetimeInfo)
 
-    if dictionary[name].get_enddate() != None:
-        datetimeInfo = dictionary[name].get_enddate()
+    if config.MEETUPS[name].get_enddate() != None:
+        datetimeInfo = config.MEETUPS[name].get_enddate()
         embed.add_field(name="End date and time",value = datetimeInfo)
     
-    if dictionary[name].get_location() != None:
-        embed.add_field(name="Location",value = dictionary[name].get_location())
+    if config.MEETUPS[name].get_location() != None:
+        embed.add_field(name="Location",value = config.MEETUPS[name].get_location())
     
-    if dictionary[name].get_status() != None:
-        embed.add_field(name="Status",value = dictionary[name].get_status())
+    if config.MEETUPS[name].get_status() != None:
+        embed.add_field(name="Status",value = config.MEETUPS[name].get_status())
 
-    if dictionary[name].get_payTo() != None:
-        embed.add_field(name="Person to pay back",value = dictionary[name].get_payTo())
+    if config.MEETUPS[name].get_payTo() != None:
+        embed.add_field(name="Person to pay back",value = config.MEETUPS[name].get_payTo())
     
-    if dictionary[name].get_payAmount() != None:
-        embed.add_field(name="Amount per person to be paid back",value = str(dictionary[name].get_payAmount()))
+    if config.MEETUPS[name].get_payAmount() != None:
+        embed.add_field(name="Amount per person to be paid back",value = str(config.MEETUPS[name].get_payAmount()))
     
-    if dictionary[name].get_payInfo() != None:
-        embed.add_field(name="Pay information",value =dictionary[name].get_payInfo())
+    if config.MEETUPS[name].get_payInfo() != None:
+        embed.add_field(name="Pay information",value =config.MEETUPS[name].get_payInfo())
     
-    if dictionary[name].get_other() != None:
-        embed.add_field(name="Other information",value = dictionary[name].get_other())
+    if config.MEETUPS[name].get_other() != None:
+        embed.add_field(name="Other information",value = config.MEETUPS[name].get_other())
     
     return embed
