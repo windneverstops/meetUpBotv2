@@ -878,4 +878,4 @@ class BackToEditButton(ui.Button):
 
 
 # Bot run token
-bot.run('MTA2NjYzNjc1NTUwOTQ1NjkxNg.Ge587b.32pgJr0AGIcMUQHs6QU2bkKN75cNuqCjmW09eA')
+bot.run('MTA2NjYzNjc1NTUwOTQ1NjkxNg.GxxTMI.8NlNNpIedAedropo8C8CndG3JXhRyh6O4CAC1o')
