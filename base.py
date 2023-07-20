@@ -21,13 +21,23 @@ bot_token = os.getenv("DISCORD_BOT_TOKEN")
 db_username = os.getenv("USERNAME")
 db_password = os.getenv("PASSWORD")
 db_host = os.getenv("HOST")
+
 configDict = {
     'user':db_username,
     'password':db_password,
     'database':'meetup',
     'host':db_host,
-    'ssl_ca':'DigiCertGlobalRootCA.crt (2).pem'
+    'ssl_ca':'DigiCertGlobalRootCA.crt (2).pem',
+    'autocommit':True
 }
+
+allowed_guilds = os.getenv("ALLOWED_GUILDS").split(',')
+config.allowed_guilds  = [guild.strip() for guild in allowed_guilds]
+
+""" config.cnx = dict()
+for guild in config.allowed_guilds:
+    config.cnx[guild] = connector.connect(**configDict) """
+
 config.cnx = connector.connect(**configDict)
 config.cursor = config.cnx.cursor(dictionary=True)
 
